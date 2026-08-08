@@ -3,10 +3,18 @@ import * as cloudflare from "@pulumi/cloudflare";
 
 const config = new pulumi.Config();
 
-const accountId = config.require("cloudflareAccountId");
-const zoneId = config.require("cloudflareZoneId");
-const webHostname = config.require("webHostname");
-const originHostname = config.require("originHostname");
+const requireNonEmpty = (key: string): string => {
+  const value = config.require(key).trim();
+  if (!value) {
+    throw new Error(`Config value '${key}' must be a non-empty string.`);
+  }
+  return value;
+};
+
+const accountId = requireNonEmpty("cloudflareAccountId");
+const zoneId = requireNonEmpty("cloudflareZoneId");
+const webHostname = requireNonEmpty("webHostname");
+const originHostname = requireNonEmpty("originHostname");
 const workerScriptName = config.get("workerScriptName") ?? "travel-web";
 const routePattern = config.get("routePattern") ?? `${webHostname}/*`;
 
