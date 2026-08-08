@@ -32,10 +32,23 @@
             packages = with pkgs; [
               gnumake
               nixfmt
+              nodejs
             ];
           };
 
-          packages.default = config.formatter;
+          packages = {
+            default = config.formatter;
+            web = pkgs.callPackage ./nix/web.nix { };
+          };
+
+          checks.web-lint = pkgs.buildNpmPackage {
+            pname = "web-lint";
+            version = "0.0.0";
+            src = ./web;
+            npmDepsHash = "sha256-3xL1/AXK1pLszPm2fIcn+HMaCAA+P0+Y4/5nx1h23Jw=";
+            npmBuildScript = "lint";
+            installPhase = "touch $out";
+          };
 
           treefmt = {
             projectRootFile = "flake.nix";
