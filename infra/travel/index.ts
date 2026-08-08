@@ -17,17 +17,21 @@ const webHostname = requireNonEmpty("webHostname");
 const originHostname = requireNonEmpty("originHostname");
 const workerScriptName = config.get("workerScriptName") ?? "travel-web";
 const routePattern = config.get("routePattern") ?? `${webHostname}/*`;
+const workerOriginHostname = JSON.stringify(originHostname);
+
+const workerContent = `const ORIGIN_HOSTNAME = ${workerOriginHostname};
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    url.hostname = ORIGIN_HOSTNAME;
+    return fetch(new Request(url.toString(), request));
+  }
+};`;
 
 const worker = new cloudflare.WorkersScript("web-worker", {
   accountId,
   scriptName: workerScriptName,
-  content: `export default {
-  async fetch(request) {
-    const url = new URL(request.url);
-    url.hostname = "${originHostname}";
-    return fetch(new Request(url.toString(), request));
-  }
-};`,
+  content: workerContent,
   compatibilityDate: "2026-08-01",
   compatibilityFlags: ["nodejs_compat"],
 });
