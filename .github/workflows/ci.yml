@@ -1,4 +1,4 @@
-name: Check
+name: CI
 
 on:
   pull_request:
@@ -18,5 +18,10 @@ jobs:
       - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
         with:
           github_access_token: ${{ github.token }}
+
+      - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
+        with:
+          name: unstoppablemango
+          skipPush: true
 
       - run: nix flake check --all-systems

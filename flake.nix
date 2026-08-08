@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    systems.url = "github:nix-systems/default";
+    systems.url = "github:nix-systems/triplet";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     treefmt-nix = {
@@ -27,7 +27,6 @@
               nixfmt
               shellcheck
             ];
-            NIXFMT = pkgs.nixfmt + "/bin/nixfmt";
           };
 
           treefmt = {
