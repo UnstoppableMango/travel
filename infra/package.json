@@ -2,7 +2,7 @@
   "name": "travel-infra",
   "version": "0.1.0",
   "description": "Travel infrastructure on Cloudflare Workers",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit"
