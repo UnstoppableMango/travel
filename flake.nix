@@ -22,7 +22,11 @@
       imports = [ inputs.treefmt-nix.flakeModule ];
 
       perSystem =
-        { pkgs, ... }:
+        {
+          config,
+          pkgs,
+          ...
+        }:
         {
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
@@ -30,6 +34,8 @@
               nixfmt
             ];
           };
+
+          packages.default = config.formatter;
 
           treefmt.programs = {
             nixfmt.enable = true;
