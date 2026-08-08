@@ -1,0 +1,6 @@
+config:
+  travel:cloudflareAccountId: ""
+  travel:cloudflareZoneId: ""
+  travel:webHostname: ""
+  travel:originHostname: ""
+  travel:workerScriptName: "travel-web"
