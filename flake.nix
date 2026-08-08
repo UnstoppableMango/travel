@@ -41,15 +41,12 @@
             web = pkgs.callPackage ./nix/web.nix { };
           };
 
-          checks.web-lint = pkgs.stdenvNoCC.mkDerivation {
-            name = "web-lint";
+          checks.web-lint = pkgs.buildNpmPackage {
+            pname = "web-lint";
+            version = "0.0.0";
             src = ./web;
-            nativeBuildInputs = [ pkgs.nodejs ];
-            buildPhase = ''
-              export HOME=$(mktemp -d)
-              npm ci --ignore-scripts
-              npm run lint
-            '';
+            npmDepsHash = "sha256-3xL1/AXK1pLszPm2fIcn+HMaCAA+P0+Y4/5nx1h23Jw=";
+            npmBuildScript = "lint";
             installPhase = "touch $out";
           };
 
