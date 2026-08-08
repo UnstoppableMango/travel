@@ -1,6 +1,9 @@
 build:
 	nix build .#
 
+build-web:
+	nix build .#web
+
 update:
 	nix flake update
 
@@ -9,3 +12,6 @@ check lint:
 
 format fmt:
 	nix fmt
+
+dev-web:
+	cd web && npm run dev
