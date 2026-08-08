@@ -1,8 +1,5 @@
 build:
-	nix build .#
-
-build-web:
-	nix build .#web
+	nix build .# .#web
 
 update:
 	nix flake update

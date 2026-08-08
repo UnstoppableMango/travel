@@ -38,16 +38,19 @@
 
           packages = {
             default = config.formatter;
-            web = pkgs.buildNpmPackage {
-              pname = "web";
-              version = "0.0.0";
-              src = ./web;
-              npmDepsHash = "sha256-qraM0H5BgFs5CpFCAGtXyGjLvu8H6xIZFNcXRBvc3p4=";
-              installPhase = ''
-                mkdir -p $out/share/web
-                cp -r dist/. $out/share/web
-              '';
-            };
+            web = pkgs.callPackage ./nix/web.nix { };
+          };
+
+          checks.web-lint = pkgs.stdenvNoCC.mkDerivation {
+            name = "web-lint";
+            src = ./web;
+            nativeBuildInputs = [ pkgs.nodejs ];
+            buildPhase = ''
+              export HOME=$(mktemp -d)
+              npm ci --ignore-scripts
+              npm run lint
+            '';
+            installPhase = "touch $out";
           };
 
           treefmt = {
