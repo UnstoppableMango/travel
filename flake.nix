@@ -1,5 +1,5 @@
 {
-  description = "A Nix flake";
+  description = "UnstoppableMango's travel repository";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
