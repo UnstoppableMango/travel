@@ -4,7 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/triplet";
-    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
 
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -19,15 +22,20 @@
       imports = [ inputs.treefmt-nix.flakeModule ];
 
       perSystem =
-        { pkgs, ... }:
+        {
+          config,
+          pkgs,
+          ...
+        }:
         {
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               gnumake
               nixfmt
-              shellcheck
             ];
           };
+
+          packages.default = config.formatter;
 
           treefmt = {
             projectRootFile = "flake.nix";
