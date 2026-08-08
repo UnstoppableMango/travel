@@ -37,8 +37,9 @@
 
           packages.default = config.formatter;
 
-          treefmt.programs = {
-            nixfmt.enable = true;
+          treefmt = {
+            projectRootFile = "flake.nix";
+            programs.nixfmt.enable = true;
           };
         };
     };
