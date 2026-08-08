@@ -1,10 +1,13 @@
 {
-  description = "UnstoppableMango's travel repository";
+  description = "A Nix flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/triplet";
-    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
 
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -25,13 +28,11 @@
             packages = with pkgs; [
               gnumake
               nixfmt
-              shellcheck
             ];
           };
 
-          treefmt = {
-            projectRootFile = "flake.nix";
-            programs.nixfmt.enable = true;
+          treefmt.programs = {
+            nixfmt.enable = true;
           };
         };
     };
