@@ -50,5 +50,14 @@ jobs:
           stack-name: unstoppablemango/travel/prod
           work-dir: infra/travel
           upsert: true
+          config-map: |
+            travel:cloudflareAccountId:
+              value: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+            travel:cloudflareZoneId:
+              value: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+            travel:webHostname:
+              value: ${{ vars.TRAVEL_WEB_HOSTNAME }}
+            travel:originHostname:
+              value: ${{ vars.TRAVEL_ORIGIN_HOSTNAME }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
