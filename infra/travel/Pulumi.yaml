@@ -1,3 +1,0 @@
-name: travel
-runtime: nodejs
-description: Travel web infrastructure on Cloudflare Workers
