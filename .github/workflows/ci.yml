@@ -35,11 +35,16 @@ jobs:
         with:
           github_access_token: ${{ github.token }}
 
+      - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
+        with:
+          name: unstoppablemango
+          skipPush: true
+
       - run: nix build .#web
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: web-dist
+          name: web
           path: result/share/web
           if-no-files-found: error
 
@@ -61,9 +66,9 @@ jobs:
           organization: unstoppablemango
           requested-token-type: urn:pulumi:token-type:access_token:organization
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
-          name: web-dist
+          name: web
           path: web/dist
 
       - run: npm ci
