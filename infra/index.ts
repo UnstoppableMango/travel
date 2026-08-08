@@ -9,6 +9,7 @@ const configSchema = z.object({
   cloudflareAccountId: z.string().trim().min(1),
   cloudflareZoneId: z.string().trim().min(1),
   webHostname: z.string().trim().min(1),
+  originHostname: z.string().trim().min(1),
   routePattern: z.string().trim().min(1).optional(),
 });
 
@@ -16,6 +17,7 @@ const infraConfig = configSchema.parse({
   cloudflareAccountId: config.get("cloudflareAccountId"),
   cloudflareZoneId: config.get("cloudflareZoneId"),
   webHostname: config.get("webHostname"),
+  originHostname: config.get("originHostname"),
   routePattern: config.get("routePattern"),
 });
 
