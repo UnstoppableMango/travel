@@ -9,7 +9,6 @@ const configSchema = z.object({
   cloudflareAccountId: z.string().trim().min(1),
   cloudflareZoneId: z.string().trim().min(1),
   webHostname: z.string().trim().min(1),
-  workerScriptName: z.string().trim().min(1).default("travel-web"),
   routePattern: z.string().trim().min(1).optional(),
 });
 
@@ -17,7 +16,6 @@ const infraConfig = configSchema.parse({
   cloudflareAccountId: config.get("cloudflareAccountId"),
   cloudflareZoneId: config.get("cloudflareZoneId"),
   webHostname: config.get("webHostname"),
-  workerScriptName: config.get("workerScriptName"),
   routePattern: config.get("routePattern"),
 });
 
@@ -29,9 +27,9 @@ const workerContent = `export default {
   }
 };`;
 
-const worker = new cloudflare.WorkersScript("web-worker", {
+const worker = new cloudflare.WorkersScript("web", {
   accountId: infraConfig.cloudflareAccountId,
-  scriptName: infraConfig.workerScriptName,
+  scriptName: "web",
   content: workerContent,
   compatibilityDate: "2026-08-01",
   compatibilityFlags: ["nodejs_compat"],
@@ -43,7 +41,7 @@ const worker = new cloudflare.WorkersScript("web-worker", {
   },
 });
 
-const route = new cloudflare.WorkersRoute("web-worker-route", {
+const route = new cloudflare.WorkersRoute("web", {
   zoneId: infraConfig.cloudflareZoneId,
   pattern: routePattern,
   script: worker.scriptName,
