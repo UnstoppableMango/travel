@@ -36,5 +36,7 @@ export function reduce(_state: State, action: Action): State {
       return { status: "error", message: action.message };
     case "LOGOUT":
       return { status: "unauthenticated" };
+    default:
+      return _state;
   }
 }
