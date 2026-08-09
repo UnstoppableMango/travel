@@ -7,6 +7,7 @@ on:
     branches: [main]
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
@@ -49,23 +50,20 @@ jobs:
           if-no-files-found: error
 
   infra:
-    if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
-      - uses: actions/setup-node@3235b876344376ab67db06f91e3dd4eb0abac5e8 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 24
 
       - uses: pulumi/auth-actions@141415910c3beb54e03b48e9057c204c97b956f2 # v2.1.0
         with:
-          organization: unstoppablemango
-          requested-token-type: urn:pulumi:token-type:access_token:organization
+          organization: UnstoppableMango
+          requested-token-type: urn:pulumi:token-type:access_token:personal
+          scope: user:UnstoppableMango
 
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
