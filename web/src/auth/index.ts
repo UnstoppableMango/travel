@@ -1,4 +1,4 @@
-export { User, Provider } from "./types.ts";
+export * from "./types.ts";
 export type {
   State,
   UnauthenticatedState,
