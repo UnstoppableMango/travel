@@ -1,18 +1,17 @@
-export type { User } from "./types.ts";
-export { UserSchema } from "./types.ts";
+export { User, Provider } from "./types.ts";
 export type {
-  AuthState,
+  State,
   UnauthenticatedState,
   AuthenticatingState,
   AuthenticatedState,
-  AuthErrorState,
+  ErrorState,
 } from "./state.ts";
-export { initialAuthState } from "./state.ts";
+export { initialState } from "./state.ts";
 export type {
-  AuthAction,
+  Action,
   LoginAction,
   LoginSuccessAction,
   LoginFailureAction,
   LogoutAction,
 } from "./actions.ts";
-export { authReducer } from "./actions.ts";
+export { reduce } from "./actions.ts";

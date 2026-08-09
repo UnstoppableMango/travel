@@ -1,28 +1,28 @@
 import type { User } from "./types.ts";
 
-export type UnauthenticatedState = {
+export interface UnauthenticatedState {
   status: "unauthenticated";
-};
+}
 
-export type AuthenticatingState = {
+export interface AuthenticatingState {
   status: "authenticating";
   provider: User["provider"];
-};
+}
 
-export type AuthenticatedState = {
+export interface AuthenticatedState {
   status: "authenticated";
   user: User;
-};
+}
 
-export type AuthErrorState = {
+export interface ErrorState {
   status: "error";
   message: string;
-};
+}
 
-export type AuthState =
+export type State =
   | UnauthenticatedState
   | AuthenticatingState
   | AuthenticatedState
-  | AuthErrorState;
+  | ErrorState;
 
-export const initialAuthState: AuthState = { status: "unauthenticated" };
+export const initialState: State = { status: "unauthenticated" };

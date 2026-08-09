@@ -1,32 +1,32 @@
 import type { User } from "./types.ts";
-import type { AuthState } from "./state.ts";
+import type { State } from "./state.ts";
 
-export type LoginAction = {
+export interface LoginAction {
   type: "LOGIN";
   provider: User["provider"];
-};
+}
 
-export type LoginSuccessAction = {
+export interface LoginSuccessAction {
   type: "LOGIN_SUCCESS";
   user: User;
-};
+}
 
-export type LoginFailureAction = {
+export interface LoginFailureAction {
   type: "LOGIN_FAILURE";
   message: string;
-};
+}
 
-export type LogoutAction = {
+export interface LogoutAction {
   type: "LOGOUT";
-};
+}
 
-export type AuthAction =
+export type Action =
   | LoginAction
   | LoginSuccessAction
   | LoginFailureAction
   | LogoutAction;
 
-export function authReducer(_state: AuthState, action: AuthAction): AuthState {
+export function reduce(_state: State, action: Action): State {
   switch (action.type) {
     case "LOGIN":
       return { status: "authenticating", provider: action.provider };
