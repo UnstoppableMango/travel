@@ -32,7 +32,7 @@
             packages = with pkgs; [
               gnumake
               nixfmt
-              nodejs
+              nodejs_24
             ];
           };
 
@@ -47,6 +47,15 @@
             src = ./web;
             npmDepsHash = "sha256-3xL1/AXK1pLszPm2fIcn+HMaCAA+P0+Y4/5nx1h23Jw=";
             npmBuildScript = "lint";
+            installPhase = "touch $out";
+          };
+
+          checks.infra-typecheck = pkgs.buildNpmPackage {
+            pname = "infra-typecheck";
+            version = "0.0.0";
+            src = ./infra;
+            npmDepsHash = "sha256-Nxz16dxetfPY/tFCyX+/5dWVh9Y79Z1NJ72IkqEzoTc=";
+            npmBuildScript = "typecheck";
             installPhase = "touch $out";
           };
 
