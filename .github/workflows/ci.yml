@@ -62,7 +62,6 @@ jobs:
           node-version: 24
 
       - uses: pulumi/auth-actions@141415910c3beb54e03b48e9057c204c97b956f2 # v2.1.0
-        if: github.event_name != 'pull_request'
         with:
           organization: UnstoppableMango
           requested-token-type: urn:pulumi:token-type:access_token:personal
@@ -93,4 +92,3 @@ jobs:
               value: ${{ vars.TRAVEL_ORIGIN_HOSTNAME }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          PULUMI_ACCESS_TOKEN: ${{ github.event_name == 'pull_request' && secrets.PULUMI_ACCESS_TOKEN || '' }}
