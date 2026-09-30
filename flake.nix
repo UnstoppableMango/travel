@@ -31,6 +31,7 @@
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               gnumake
+              nix-update
               nixfmt
               nodejs_24
             ];
@@ -41,11 +42,10 @@
             web = pkgs.callPackage ./nix/web.nix { };
           };
 
-          checks.web-lint = pkgs.buildNpmPackage {
+          # Shares npmDeps with packages.web, so web/package-lock.json has one
+          # hash to keep current.
+          checks.web-lint = config.packages.web.overrideAttrs {
             pname = "web-lint";
-            version = "0.0.0";
-            src = ./web;
-            npmDepsHash = "sha256-NoKHe642rraBXu2G1i1VTSlsAZeGzdBzZ8fBdwkBkVs=";
             npmBuildScript = "lint";
             installPhase = "touch $out";
           };

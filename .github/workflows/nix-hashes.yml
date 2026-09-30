@@ -1,0 +1,57 @@
+name: Nix hashes
+
+# Renovate bumps package-lock.json but cannot recompute npmDepsHash, so its PRs
+# fail the build until someone copies the new hash in. This job does that copy.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    if: >-
+      github.event.pull_request.user.login == 'thecluster-bot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: false
+
+      - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
+        with:
+          github_access_token: ${{ github.token }}
+
+      - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
+        with:
+          name: unstoppablemango
+          skipPush: true
+
+      - run: nix develop -c make hashes
+
+      - id: diff
+        run: git diff --quiet || echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Minted after nix-update has evaluated the PR's code, so that code never
+      # runs with a token that can push.
+      - if: steps.diff.outputs.changed
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+      # A push with GITHUB_TOKEN would not start a new CI run, so the fixed
+      # commit would never be checked.
+      - if: steps.diff.outputs.changed
+        env:
+          TOKEN: ${{ steps.app-token.outputs.token }}
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -am 'fix(nix): update hashes'
+          git push "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${BRANCH}"
