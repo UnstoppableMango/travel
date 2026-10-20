@@ -33,6 +33,7 @@
               gnumake
               nixfmt
               nodejs_24
+              vitejs
             ];
           };
 
